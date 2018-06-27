@@ -1,0 +1,25 @@
+{
+  "name": "rl.stat",
+  "version": "1.0.0",
+  "description": "Rocket League Statistics Platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbyers44/rl.stat.git"
+  },
+  "keywords": [
+    "rocketleague",
+    "stats",
+    "statistics",
+    "analysis"
+  ],
+  "author": "Jack Byers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbyers44/rl.stat/issues"
+  },
+  "homepage": "https://github.com/jbyers44/rl.stat#readme"
+}
