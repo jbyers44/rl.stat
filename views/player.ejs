@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Player Info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Lilita+One|Shrikhand" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+  </head>
+  <style>
+  </style>
+  <body>
+    <div>
+      <% include partials/navbar %>
+    </div>
+    <div class="content">
+      <div class="sidebar">
+        /  profile information
+        <div class="playerpanel">
+          <img class="avatar" src="/images/site/19.png" alt="bronze1"/>
+          <div class="info">
+            <div class="t1">jb44_</div>
+            <ul class="detail">
+              <li class="cat">platform:</li>
+              <li>steam</li>
+            </ul>
+            <ul class="detail2">
+              <li class="cat">profile link</li>
+              </ul>
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        /  rank information
+        <div class="rankpanels">
+          <div class="panel">
+            <div class="t1">
+              standard
+            </div>
+            <% if(standard !== null){ %>
+              <%=standard[0]%>
+              <%=standard[1]%>
+              <%=standard[2]%>
+            <% } %>
+            <% if(error !== null){ %>
+              <%= error %>
+            <% } %>
+          </div>
+          <div class="panel">
+            <div class="t1">
+              doubles
+            </div>
+            <% if(doubles !== null){ %>
+              <%=doubles[0]%>
+              <%=doubles[1]%>
+              <%=doubles[2]%>
+            <% } %>
+            <% if(error !== null){ %>
+              <%= error %>
+            <% } %>
+          </div>
+          <div class="panel">
+            <div class="t1">
+              duel
+            </div>
+            <% if(duel !== null){ %>
+              <%=duel[0]%>
+              <%=duel[1]%>
+              <%=duel[2]%>
+            <% } %>
+            <% if(error !== null){ %>
+              <%= error %>
+            <% } %>
+          </div>
+          <div class="panel">
+            <div class="t1">
+              solo standard
+            </div>
+            <% if(solo !== null){ %>
+              <%=solo[0]%>
+              <%=solo[1]%>
+              <%=solo[2]%>
+            <% } %>
+            <% if(error !== null){ %>
+              <%= error %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include partials/footer %>
+  </body>
+</html>
