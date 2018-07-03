@@ -38,9 +38,16 @@
               standard
             </div>
             <% if(standard !== null){ %>
-              <%=standard[0]%>
-              <%=standard[1]%>
-              <%=standard[2]%>
+              <div>
+                <%=standard.rankString%>
+                <%=standard.divisionString%>
+              </div>
+              <div>
+                <img class="rankpic" src=<%="/images/site/" + standard[1] + ".png"%> alt="rank"/>
+              </div>
+              <div>
+              rating: <%=standard[0]%>
+              </div>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
@@ -51,9 +58,16 @@
               doubles
             </div>
             <% if(doubles !== null){ %>
-              <%=doubles[0]%>
-              <%=doubles[1]%>
-              <%=doubles[2]%>
+              <div>
+                <%=doubles.rankString%>
+                <%=doubles.divisionString%>
+              </div>
+              <div>
+                <img class="rankpic" src=<%="/images/site/" + doubles[1] + ".png"%> alt="rank"/>
+              </div>
+              <div>
+              rating: <%=doubles[0]%>
+              </div>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
@@ -64,9 +78,16 @@
               duel
             </div>
             <% if(duel !== null){ %>
-              <%=duel[0]%>
-              <%=duel[1]%>
-              <%=duel[2]%>
+              <div>
+                <%=duel.rankString%>
+                <%=duel.divisionString%>
+              </div>
+              <div>
+                <img class="rankpic" src=<%="/images/site/" + duel[1] + ".png"%> alt="rank"/>
+              </div>
+              <div>
+              rating: <%=duel[0]%>
+              </div>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
@@ -77,9 +98,16 @@
               solo standard
             </div>
             <% if(solo !== null){ %>
-              <%=solo[0]%>
-              <%=solo[1]%>
-              <%=solo[2]%>
+              <div>
+                <%=solo.rankString%>
+                <%=solo.divisionString%>
+              </div>
+              <div>
+                <img class="rankpic" src=<%="/images/site/" + solo[1] + ".png"%> alt="rank"/>
+              </div>
+              <div>
+              rating: <%=solo[0]%>
+              </div>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>

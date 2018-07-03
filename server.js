@@ -72,6 +72,74 @@ app.post('/player', function (req, res) {
             let doubles = [response["rankedSeasons"]["8"]["11"]["rankPoints"], response["rankedSeasons"]["8"]["11"]["tier"], response["rankedSeasons"]["8"]["11"]["division"]];
             let duel = [response["rankedSeasons"]["8"]["10"]["rankPoints"], response["rankedSeasons"]["8"]["10"]["tier"], response["rankedSeasons"]["8"]["10"]["division"]];
             let solo = [response["rankedSeasons"]["8"]["12"]["rankPoints"], response["rankedSeasons"]["8"]["12"]["tier"], response["rankedSeasons"]["8"]["12"]["division"]];
+            
+
+            let ranks = [standard, doubles, duel, solo];
+            for(let i of ranks)
+            {
+              switch(standard[1])
+              {
+                case 1:
+                i.rankString = "Bronze I";
+                  break;
+                case 2:
+                  i.rankString = "Bronze II";
+                  break;
+                case 3:
+                i.rankString = "Bronze III";
+                  break;
+                case 4:
+                i.rankString = "Silver I";
+                  break;
+                case 5:
+                i.rankString = "Silver II";
+                  break;
+                case 6:
+                i.rankString = "Silver III";
+                  break;
+                case 7:
+                i.rankString = "Gold I";
+                  break;
+                case 8:
+                  i.rankString = "Gold II";
+                  break;
+                case 9:
+                i.rankString = "Gold III";
+                  break;
+                case 10:
+                i.rankString = "Platinum I";
+                  break;
+                case 11:
+                i.rankString = "Platinum II";
+                  break;
+                case 12:
+                i.rankString = "Platinum III";
+                  break;
+                case 13:
+                i.rankString = "Diamond I";
+                  break;
+                case 14:
+                i.rankString = "Diamond II";
+                  break;
+                case 15:
+                i.rankString = "Diamond III";
+                  break;
+                case 16:
+                i.rankString = "Champion I";
+                  break;
+                case 17:
+                i.rankString = "Champion II";
+                  break;
+                case 18:
+                  i.rankString = "Champion III";
+                  break;
+                case 19:
+                  i.rankString = "Grand Champion";
+                  break;
+              }
+              i.divisionString = "Division " + (i[2] + 1);
+            }
+            
             res.render('player', {standard: standard, doubles: doubles, duel: duel, solo: solo, error: null});
           }
         });
