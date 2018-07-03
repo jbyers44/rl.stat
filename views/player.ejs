@@ -17,17 +17,19 @@
       <div class="sidebar">
         /  profile information
         <div class="playerpanel">
-          <img class="avatar" src="/images/site/19.png" alt="bronze1"/>
+          <% if(profile !== null){ %>
+          <img class="avatar" src=<%="" + profile.avurl%> alt="avatar"/>
           <div class="info">
-            <div class="t1">jb44_</div>
+            <div class="t1"><%=profile.name%></div>
             <ul class="detail">
               <li class="cat">platform:</li>
               <li>steam</li>
             </ul>
             <ul class="detail2">
-              <li class="cat">profile link</li>
-              </ul>
+              <li class="cat"><a href =<%=profile.link%>>profile link</a></li>
+            </ul>
           </div>
+          <% } %>
         </div>
       </div>
       <div class="main">

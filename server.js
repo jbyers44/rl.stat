@@ -4,16 +4,39 @@ const bodyParser = require('body-parser');
 const sql = require('mssql')
 const request = require('request')
 
-async () => {
-  try {
-      const pool = await sql.connect('mssql://jbyers:Tucketdog44!@localhost/database')
-      const result = await sql.query`select * from MatchData`
-      console.dir(result)
-  } catch (err) {
-      // ... error checks
+/*
+var dbConfig = {
+  user: 'jbyers',
+  password: 'rlstatpass!',
+  server: 'PSML65609',
+  database: 'rlstat',
+  port: 1433,
+  debug: true,
+  options: {
+    instanceName: 'SQLEXPRESS'
   }
 }
 
+function getEmp() {
+  var conn = new sql.ConnectionPool(dbConfig);
+  conn.connect().then(function () {
+      var req = new sql.Request(conn);
+      req.query("SELECT * FROM MatchStats WHERE PlatformId = 76561198438294275").then(function (recordset) {
+          console.log(recordset);
+          conn.close();
+      })
+      .catch(function (err) {
+          console.log(err);
+          conn.close();
+      });        
+  })
+  .catch(function (err) {
+      console.log(err);
+  });
+}
+
+getEmp();
+*/
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static('public'));
@@ -24,30 +47,30 @@ app.get('/', function (req, res) {
 })
 
 app.get('/player', function (req, res) {
-  res.render('player', {standard: null, doubles: null, duel: null, solo: null, error: null });
+  res.render('error', {message: "Invald page, must submit a player request first"});
 })
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
 
+app.post('')
 app.post('/player', function (req, res) {
   let player_Id = req.body.steamID;
   let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
   let steamUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steamKey}&vanityurl=${player_Id}`;
   let steam_ID = null;
-  console.log(steamUrl);
   request(steamUrl, function(err, response, body) {
     if(err)
     {
-      res.render('player', {standard: null, doubles: null, duel: null, solo: null, error: "Invalid steam name" });
+      res.render('player', {standard: standard, doubles: doubles, duel: duel, solo: solo, error: null, profile: null});
     }
     else 
     {
       let response = JSON.parse(body);
       if(response.response.steamid == undefined)
       {
-        res.render('player', {standard: null, doubles: null, duel: null, solo: null, error: "Invalid steam name" });
+        res.render('player', {standard: null, doubles: null, duel: null, solo: null, error: "Invalid steam name", profile: null});
       }
       else
       {
@@ -63,7 +86,7 @@ app.post('/player', function (req, res) {
         request(options, function(err, response, body) {
           if(err || response == 404)
           {
-            res.render('player', {standard: null, doubles: null, duel: null, solo: null, error: "404: Stats not found" });
+            res.render('player', {standard: null, doubles: null, duel: null, solo: null, error: "404: Stats not found", profile: null});
           }
           else
           {
@@ -143,12 +166,32 @@ app.post('/player', function (req, res) {
               i.divisionString = "Division " + (i[2] + 1);
             }
             
-            res.render('player', {standard: standard, doubles: doubles, duel: duel, solo: solo, error: null});
+            let url = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${steam_ID}`;
+            console.log(url);
+            request(url, function(err, response, body) {
+              if(err)
+              {
+                
+                res.render('player', {standard: standard, doubles: doubles, duel: duel, solo: solo, error: null, profile: null});
+              }
+              else
+              {
+                let response = JSON.parse(body);
+                console.log(response);
+                var profile = [""];
+                profile.name = response.response.players[0].personaname;
+                profile.avurl = response.response.players[0].avatarfull;
+                profile.link = response.response.players[0].profileurl;
+
+                res.render('player/' + steam_ID, {standard: standard, doubles: doubles, duel: duel, solo: solo, error: null, profile: profile});
+              }
+            });
           }
         });
       }
     }
   });
 })
+
 
 
