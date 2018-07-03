@@ -77,58 +77,61 @@ app.post('/player', function (req, res) {
             let ranks = [standard, doubles, duel, solo];
             for(let i of ranks)
             {
-              switch(standard[1])
+              switch(i[1])
               {
+                case 0:
+                  i.rankString = "Unranked"
+                  break;
                 case 1:
-                i.rankString = "Bronze I";
+                  i.rankString = "Bronze I";
                   break;
                 case 2:
                   i.rankString = "Bronze II";
                   break;
                 case 3:
-                i.rankString = "Bronze III";
+                  i.rankString = "Bronze III";
                   break;
                 case 4:
-                i.rankString = "Silver I";
+                  i.rankString = "Silver I";
                   break;
                 case 5:
-                i.rankString = "Silver II";
+                  i.rankString = "Silver II";
                   break;
                 case 6:
-                i.rankString = "Silver III";
+                  i.rankString = "Silver III";
                   break;
                 case 7:
-                i.rankString = "Gold I";
+                  i.rankString = "Gold I";
                   break;
                 case 8:
                   i.rankString = "Gold II";
                   break;
                 case 9:
-                i.rankString = "Gold III";
+                  i.rankString = "Gold III";
                   break;
                 case 10:
-                i.rankString = "Platinum I";
+                  i.rankString = "Platinum I";
                   break;
                 case 11:
-                i.rankString = "Platinum II";
+                  i.rankString = "Platinum II";
                   break;
                 case 12:
-                i.rankString = "Platinum III";
+                  i.rankString = "Platinum III";
                   break;
                 case 13:
-                i.rankString = "Diamond I";
+                  i.rankString = "Diamond I";
                   break;
                 case 14:
-                i.rankString = "Diamond II";
+                  i.rankString = "Diamond II";
                   break;
                 case 15:
-                i.rankString = "Diamond III";
+                  i.rankString = "Diamond III";
                   break;
                 case 16:
-                i.rankString = "Champion I";
+                  i.rankString = "Champion I";
                   break;
                 case 17:
-                i.rankString = "Champion II";
+                  i.rankString = "Champion II";
                   break;
                 case 18:
                   i.rankString = "Champion III";
