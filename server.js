@@ -129,9 +129,10 @@ function steamToStats(steam_ID) {
 }
 
 function vanityToSteam(player_ID) {
-  console.log("vts pid val: " + player_ID);
+  
   let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
   let steamUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steamKey}&vanityurl=${player_ID}`;
+  console.log("vts pid url: " + steamUrl);
   request(steamUrl, function(err, response, body) {
     if(err)
     {
