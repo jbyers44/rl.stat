@@ -32,6 +32,12 @@ body {
     display: flex;
     flex-direction: column;
   }
+  .matchHistory { 
+    margin: 5px 0px;
+    padding: 5px 0px;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+  }
   .rankpanels {
     margin: 5px 0px;
     padding: 5px 0px;
