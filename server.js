@@ -140,13 +140,13 @@ function vanityToSteam(player_ID) {
     else 
     {
       let response = JSON.parse(body);
-      console.log(response);
       if(response.response.steamid == undefined)
       {
         return null;
       }
       else
       {
+        console.log("wtf");
         return response.response.steamid;
       }
     }
