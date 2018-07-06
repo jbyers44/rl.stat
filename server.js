@@ -146,8 +146,9 @@ function vanityToSteam(player_ID) {
       }
       else
       {
-        console.log("wtf");
-        return response.response.steamid;
+        let steam_ID = response.response.steamid;
+        console.log(steam_ID);
+        return steam_ID;
       }
     }
   });
