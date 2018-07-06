@@ -146,7 +146,7 @@ function vanityToSteam(player_ID) {
       }
       else
       {
-        return response.reponse.steamid;
+        return response.response.steamid;
       }
     }
   });
