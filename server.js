@@ -58,7 +58,8 @@ app.listen(3000, function () {
 app.post('/player', function (req, res) {
   let usrIn = req.body.usrInput;
   let steam_ID = vanityToSteam(usrIn);
-  console.log("steam id from vanity: " + steam_ID);
+  console.log("steam id from vanity: " + vanityToSteam(usrIn));
+  console.log("Wtf is this async stuff" + steam_ID);
   if(steam_ID == null) {
     steam_ID = usrIn;
   }
@@ -129,7 +130,6 @@ function steamToStats(steam_ID) {
 }
 
 function vanityToSteam(player_ID) {
-  
   let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
   let steamUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steamKey}&vanityurl=${player_ID}`;
   request(steamUrl, function(err, response, body) {
@@ -147,7 +147,7 @@ function vanityToSteam(player_ID) {
       else
       {
         let steam_ID = response.response.steamid;
-        console.log(steam_ID);
+        console.log("WTF" + steam_ID);
         return steam_ID;
       }
     }
