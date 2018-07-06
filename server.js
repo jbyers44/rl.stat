@@ -55,14 +55,13 @@ app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
 
-/*app.post('/player', function (req, res) {
+app.post('/player', function (req, res) {
   console.log(req.body.usrInput);
-  let usrin = req.body.userinput;
-  console.log(req.body.userinput);
-  let steam_ID = vanityToSteam(usrin);
+  let usrIn = req.body.usrInput;
+  let steam_ID = vanityToSteam(usrIn);
   console.log("steam id from vanity: " + steam_ID);
   if(steam_ID == null) {
-    steam_ID = usrin;
+    steam_ID = usrIn;
   }
   let profile = steamToProfile(steam_ID);
   if(profile == null) {
@@ -78,10 +77,6 @@ app.listen(3000, function () {
       res.render('player', {profile: profile, ranks: ranks, error: null});
     }
   }
-});*/
-
-app.post('AAAAAAAAAAAAAAAAAAAAAAAAA', function (req, res) {
-  console.log(req.body.steam);
 });
 
 function steamToProfile(steam_ID) {
