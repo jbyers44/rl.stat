@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 //const sql = require('mssql')
-const request = require('request')
+const request = require('request-promise')
 
 /*
 var dbConfig = {
@@ -11,7 +11,6 @@ var dbConfig = {
   server: 'PSML65609',
   database: 'rlstat',
   port: 1433,
-  debug: true,
   options: {
     instanceName: 'SQLEXPRESS'
   }
@@ -55,110 +54,9 @@ app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
 
-app.post('/player', function (req, res) {
-  let usrIn = req.body.usrInput;
-  let steam_ID = vanityToSteam(usrIn);
-  console.log("steam id from vanity: " + vanityToSteam(usrIn));
-  console.log("Wtf is this async stuff" + steam_ID);
-  if(steam_ID == null) {
-    steam_ID = usrIn;
-  }
-  let profile = steamToProfile(steam_ID);
-  if(profile == null) {
-    res.render('error', {message: "Invalid steam ID or vanity url"});
-  }
-  else {
-    let ranks = steamToStats(steam_ID);
-    if(ranks == null) {
-      res.render('player', {profile: profile, ranks: null, error: "Unable to get Rocket League statistics from Psyonix API"});
-    }
-    else {
-      assignRankString(ranks);
-      res.render('player', {profile: profile, ranks: ranks, error: null});
-    }
-  }
-});
-
-function steamToProfile(steam_ID) {
-  let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
-  let url = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${steam_ID}`;
-  console.log(url);
-  request(url, function(err, response, body) {
-    if(err)
-    {
-      return null;
-    }
-    else
-    {
-      let response = JSON.parse(body);
-      console.log(response);
-      var profile = [""];
-      profile.name = response.response.players[0].personaname;
-      profile.avurl = response.response.players[0].avatarfull;
-      profile.link = response.response.players[0].profileurl;
-
-      return profile;
-    }
-  });
-}
-
-function steamToStats(steam_ID) {
-  let key = 'P5AIQRRDCYLFDOXZ0BKA1IE2S97REIFD';
-  let url = `https://api.rocketleaguestats.com/v1/player?unique_id=${steam_ID}&platform_id=1`;
-  var options = {
-    url: url,
-    headers: {
-      Authorization: key
-    }
-  };
-  request(options, function(err, response, body) {
-    if(err || response == 404)
-    {
-      return null;
-    }
-    else
-    {
-      let response = JSON.parse(body);
-      let standard = [response["rankedSeasons"]["8"]["13"]["rankPoints"], response["rankedSeasons"]["8"]["13"]["tier"], response["rankedSeasons"]["8"]["13"]["division"]];
-      let doubles = [response["rankedSeasons"]["8"]["11"]["rankPoints"], response["rankedSeasons"]["8"]["11"]["tier"], response["rankedSeasons"]["8"]["11"]["division"]];
-      let duel = [response["rankedSeasons"]["8"]["10"]["rankPoints"], response["rankedSeasons"]["8"]["10"]["tier"], response["rankedSeasons"]["8"]["10"]["division"]];
-      let solo = [response["rankedSeasons"]["8"]["12"]["rankPoints"], response["rankedSeasons"]["8"]["12"]["tier"], response["rankedSeasons"]["8"]["12"]["division"]];
-      let ranks = [standard, doubles, duel, solo];
-      return ranks;
-    }
-  });
-}
-
-function vanityToSteam(player_ID) {
-  let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
-  let steamUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steamKey}&vanityurl=${player_ID}`;
-  request(steamUrl, function(err, response, body) {
-    if(err)
-    {
-      return null;
-    }
-    else 
-    {
-      let response = JSON.parse(body);
-      if(response.response.steamid == undefined)
-      {
-        return null;
-      }
-      else
-      {
-        let steam_ID = response.response.steamid;
-        console.log("WTF" + steam_ID);
-        return steam_ID;
-      }
-    }
-  });
-}
-
-function assignRankString(ranks) {
-  for(let i of ranks)
-  {
-    switch(i[1])
-    {
+function assignStrings(ranks) {
+  for(let i of ranks) {
+    switch(i[1]) {
       case 0:
         i.rankString = "Unranked";
         break;
@@ -220,6 +118,104 @@ function assignRankString(ranks) {
         i.rankString = "Grand Champion";
         break;
     }
-    i.rankString = "Division " + (i[2] + 1);
+    i.divisionString = "Division " + (i[2] + 1);
   }
+}
+
+app.post('/player', async function (req, res) {
+  var player_ID = req.body.usrInput;
+  var steam_ID = await vanityToSteam(player_ID);
+  if(steam_ID == null) {
+    steam_ID = player_ID;
+  }
+  console.log(steam_ID);
+  let profile = await steamToProfile(steam_ID);
+  let ranks = null;
+  console.log(profile);
+  if(profile !== null) {
+    console.log("but why tho");
+    ranks = await steamToStats(steam_ID);
+  }
+  if(profile == null) {
+    res.render('error', {message: "Failed to find a corresponding steam profile"});
+  }
+  else if(ranks == null) {
+    res.render('error', {message: "Failed to locate valid statistics for the entered user in the Psyonix API"});
+  }
+  else {
+    res.render('player', {profile: profile, ranks: ranks, error: null});
+  }
+});
+
+async function vanityToSteam(player_ID) {
+  let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
+  let steamUrl = `http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${steamKey}&vanityurl=${player_ID}`;
+  var steam_ID = null;
+  await request(steamUrl, function(err, response, body) {
+    if(err) {
+      return null;
+    }
+    else {
+      let data = JSON.parse(body);
+      console.log(data);
+      if(data.response.success == 42) {
+        return null;
+      }
+      steam_ID = data.response.steamid;    
+    }
+  });
+  return steam_ID;
+}
+
+async function steamToProfile(steam_ID) {
+  let steamKey = '125C3420FDFF9B8E9675EA1D01F3BF18';
+  var profile = [""];
+  let profileUrl = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${steam_ID}`;
+  await request(profileUrl, function(err, response, body) {
+    if(err) {
+      profile = null;
+    }
+    else {
+      let data = JSON.parse(body);
+      console.log(data);
+      if(data.response.players.length == 0) {
+        console.log("srsly");
+        profile = null;
+      }
+      else {
+        profile.name = data.response.players[0].personaname;
+        profile.avurl = data.response.players[0].avatarfull;
+        profile.link = data.response.players[0].profileurl;
+      }
+    }
+  });
+  return profile;
+}
+
+async function steamToStats(steam_ID) {
+  let key = 'P5AIQRRDCYLFDOXZ0BKA1IE2S97REIFD';
+  let url = `https://api.rocketleaguestats.com/v1/player?unique_id=${steam_ID}&platform_id=1`;
+  var ranks = [""];
+  var options = {
+    url: url,
+    headers: {
+      Authorization: key
+    }
+  };
+  await request(options, function(err, response, body) {
+    if(err) {
+      return null;
+    }
+    else {
+      let data = JSON.parse(body);
+      console.log(data);
+      let standard = [data["rankedSeasons"]["8"]["13"]["rankPoints"], data["rankedSeasons"]["8"]["13"]["tier"], data["rankedSeasons"]["8"]["13"]["division"]];
+      let doubles = [data["rankedSeasons"]["8"]["11"]["rankPoints"], data["rankedSeasons"]["8"]["11"]["tier"], data["rankedSeasons"]["8"]["11"]["division"]];
+      let duel = [data["rankedSeasons"]["8"]["10"]["rankPoints"], data["rankedSeasons"]["8"]["10"]["tier"], data["rankedSeasons"]["8"]["10"]["division"]];
+      let solo = [data["rankedSeasons"]["8"]["12"]["rankPoints"], data["rankedSeasons"]["8"]["12"]["tier"], data["rankedSeasons"]["8"]["12"]["division"]];
+      assignStrings([standard, doubles, duel, solo]);
+      ranks = {standard: standard, doubles: doubles, duel: duel, solo: solo};     
+    }
+  });
+  return ranks;
 }

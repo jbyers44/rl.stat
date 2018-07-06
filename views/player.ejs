@@ -39,16 +39,16 @@
             <div class="t1">
               standard
             </div>
-            <% if(standard !== null){ %>
+            <% if(ranks !== null){ %>
               <div>
-                <%=standard.rankString%>
-                <%=standard.divisionString%>
+                <%=ranks.standard.rankString%>
+                <%=ranks.standard.divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + standard[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks.standard[1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=standard[0]%>
+              rating: <%=ranks.standard[0]%>
               </div>
             <% } %>
             <% if(error !== null){ %>
@@ -59,16 +59,16 @@
             <div class="t1">
               doubles
             </div>
-            <% if(doubles !== null){ %>
+            <% if(ranks !== null){ %>
               <div>
-                <%=doubles.rankString%>
-                <%=doubles.divisionString%>
+                <%=ranks.doubles.rankString%>
+                <%=ranks.doubles.divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + doubles[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks.doubles[1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=doubles[0]%>
+              rating: <%=ranks.doubles[0]%>
               </div>
             <% } %>
             <% if(error !== null){ %>
@@ -79,16 +79,16 @@
             <div class="t1">
               duel
             </div>
-            <% if(duel !== null){ %>
+            <% if(ranks !== null){ %>
               <div>
-                <%=duel.rankString%>
-                <%=duel.divisionString%>
+                <%=ranks.duel.rankString%>
+                <%=ranks.duel.divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + duel[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks.duel[1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=duel[0]%>
+              rating: <%=ranks.duel[0]%>
               </div>
             <% } %>
             <% if(error !== null){ %>
@@ -99,16 +99,16 @@
             <div class="t1">
               solo standard
             </div>
-            <% if(solo !== null){ %>
+            <% if(ranks !== null){ %>
               <div>
-                <%=solo.rankString%>
-                <%=solo.divisionString%>
+                <%=ranks.solo.rankString%>
+                <%=ranks.solo.divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + solo[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks.solo[1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=solo[0]%>
+              rating: <%=ranks.solo[0]%>
               </div>
             <% } %>
             <% if(error !== null){ %>
