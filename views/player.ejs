@@ -163,7 +163,9 @@
             </table>
           <% } %>
           <% if(data.matchStats.recordset.length == 0) { %>
-            no entries found for user entered (are you running our auto-uploader?)
+            <div class="errmsg">
+              no matches recorded for this user (are you using the auto-uploader?)
+            </div>
           <% } %>
         </div>
       </div>

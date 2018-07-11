@@ -140,6 +140,11 @@ app.post('/player', async function (req, res) {
       res.render('error', {message: "Failed to find a corresponding steam profile"});
     }
     else {
+      if(ranks === undefined || ranks.length == 0)
+      {
+        ranks = null;
+        errMsg = "no ranked statistics found for the entered user.";
+      }
       res.render('player', {profile: profile, ranks: ranks, data: data, dict: dict, error: errMsg});
     }
   }
