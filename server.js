@@ -119,20 +119,19 @@ app.post('/player', async function (req, res) {
     var player_ID = req.body.usrInput;
     var steam_ID = await vanityToSteam(player_ID);
     var data = [];
+    var errMsg = null;
     if(steam_ID == null) {
       steam_ID = player_ID;
     }
-    console.log(steam_ID);
-    try {
-      var profile = await steamToProfile(steam_ID);
-    }
-    catch (error)
-    {
-      //dep
-    }
-    let ranks = null;
+    var profile = await steamToProfile(steam_ID);
+    var ranks = null;
     if(profile !== null) {
-      ranks = await steamToStats(steam_ID);
+      try {
+        ranks = await steamToStats(steam_ID);
+      }
+      catch (error) {
+        errMsg = "No ranked statistics found for the entered user.";
+      }
       data.matchStats = await sqlCall("SELECT PlatformId, Team, Score, Goals, Assists, Saves, Shots, CarId, Verdict, MatchStats.MatchId, [Date], TeamSize, Team0Score, Team1Score, " +
                                       "MatchType, MapName, FieldOfView, Height, Pitch, Distance, Stiffness, SwivelSpeed, TransitionSpeed FROM MatchStats INNER JOIN MatchData ON MatchStats.MatchId = " +
                                       "MatchData.MatchId WHERE PlatformId = " + steam_ID + " ORDER BY [Date] desc");
@@ -140,15 +139,13 @@ app.post('/player', async function (req, res) {
     if(profile == null) {
       res.render('error', {message: "Failed to find a corresponding steam profile"});
     }
-    else if(ranks == null) {
-      res.render('error', {message: "Failed to locate valid statistics for the entered user in the Psyonix API"});
-    }
     else {
-      res.render('player', {profile: profile, ranks: ranks, data: data, dict: dict, error: null});
+      res.render('player', {profile: profile, ranks: ranks, data: data, dict: dict, error: errMsg});
     }
   }
   catch (error) {
     console.error(error = "WE HAD AN ERROR");
+    res.render('error', {message: errMsg});
   }
 });
 
@@ -178,6 +175,7 @@ async function steamToProfile(steam_ID) {
   await request(profileUrl, function(err, response, body) {
     if(err) {
       profile = null;
+      return profile;
     }
     else {
       let data = JSON.parse(body);

@@ -70,6 +70,12 @@ body {
     border-top: 1px solid #ddd;
     display: flex;
   }
+  .errmsg {
+    text-align: center;
+    margin: 50px auto;
+    padding: 2% 10%;
+    border: 1px solid #ddd;
+  }
   .panel {
     display: flex;
     flex-direction: column;

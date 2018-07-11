@@ -37,11 +37,11 @@
       <div class="main">
         /  rank information
         <div class="rankpanels">
+          <% if(ranks != null) { %>
           <div class="panel">
             <div class="t1">
               standard
             </div>
-            <% if(ranks !== null) { %>
               <% var ranks = ranks[ranks.length - 1]; %>
               <% if(ranks[0] !== null) { %>
               <div>
@@ -55,16 +55,11 @@
               rating: <%=ranks[0][0]%>
               </div>
               <% } %>
-            <% } %>
-            <% if(error !== null){ %>
-              <%= error %>
-            <% } %>
           </div>
           <div class="panel">
             <div class="t1">
               doubles
             </div>
-            <% if(ranks !== null) { %>
               <% if(ranks[1] !== null) { %>
               <div>
                 <%=ranks[1].rankString%>
@@ -77,16 +72,11 @@
               rating: <%=ranks[1][0]%>
               </div>
               <% } %>
-            <% } %>
-            <% if(error !== null){ %>
-              <%= error %>
-            <% } %>
           </div>
           <div class="panel">
             <div class="t1">
               duel
             </div>
-            <% if(ranks !== null) { %>
               <% if(ranks[2] !== null) { %>
               <div>
                 <%=ranks[2].rankString%>
@@ -99,16 +89,11 @@
               rating: <%=ranks[2][0]%>
               </div>
               <% } %>
-            <% } %>
-            <% if(error !== null){ %>
-              <%= error %>
-            <% } %>
           </div>
           <div class="panel">
             <div class="t1">
               solo standard
             </div>
-            <% if(ranks !== null) { %>
               <% if(ranks[3] !== null) { %>
               <div>
                 <%=ranks[3].rankString%>
@@ -121,11 +106,13 @@
               rating: <%=ranks[3][0]%>
               </div>
               <% } %>
-            <% } %>
-            <% if(error !== null){ %>
-              <%= error %>
-            <% } %>
           </div>
+          <% } %>
+          <% if(error !== null){ %>
+          <div class="errmsg">
+            <%= error %>
+          </div>
+          <% } %>
         </div>
         / match history
         <div class="matchhistory">
