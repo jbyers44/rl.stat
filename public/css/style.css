@@ -32,11 +32,36 @@ body {
     display: flex;
     flex-direction: column;
   }
-  .matchHistory { 
+  .matchhistory { 
+    display: flex;
+    overflow-y: auto;
     margin: 5px 0px;
     padding: 5px 0px;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
+  }
+  .mhtable {
+    border-spacing: 0px;
+    max-height: 550px;
+    flex-grow: 1;
+  }
+  tr.win {
+    background-color: rgb(228, 245, 255);
+  }
+  tr.loss {
+    background-color: white;
+  }
+  td {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    padding: 8px
+  }
+  td.team {
+    font-weight: bold;
+  }
+  th {
+    padding: 8px
   }
   .rankpanels {
     margin: 5px 0px;

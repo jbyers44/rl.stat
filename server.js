@@ -4,6 +4,65 @@ const bodyParser = require('body-parser');
 const sql = require('mssql')
 const request = require('request-promise')
 
+var dict = {};
+dict.carDict = {
+  21: "Backfire",
+  22: "Breakout",
+  23: "Octane",
+  24: "Paladin",
+  25: "Roadhog",
+  26: "Gizmo",
+  27: "Sweet Tooth",
+  28: "X-Devil",
+  29: "Hotshot",
+  30: "Merc",
+  31: "Venom",
+  402: "Takumi",
+  403: "Dominus",
+  404: "Scarab",
+  523: "Zippy",
+  597: "Delorean",
+  600: "Ripper",
+  607: "Grog",
+  625: "Armadillo",
+  723: "Hogsticker",
+  803: "'16 Batmobile'",
+  1018: "Dominus GT",
+  1159: "X-Devil Mk2",
+  1171: "Masamune",
+  1172: "Marauder",
+  1286: "Aftershock",
+  1295: "Takumi RX-T",
+  1300: "Roadhog XL",
+  1317: "Esper",
+  1416: "Breakout Type-S",
+  1475: "Proteus",
+  1478: "Triton",
+  1533: "Vulcan",
+  1568: "Octane ZSR",
+  1603: "Twinmill III",
+  1623: "Bone Shaker",
+  1624: "Endo",
+  1675: "Ice Charger",
+  1691: "Mantis",
+  1856: "Jager 619",
+  1883: "Imperator DT5",
+  1919: "Centio V17",
+  1932: "Animus GP",
+  2070: "Werewolf",
+  2268: "Dodge Charger R/T",
+  2269: "Skyline GT-R",
+  2298: "Samus' Gunship",
+  2313: "Mario NSR",
+  2665: "TDK Tumbler",
+  2666: "'89 Batmobile'",
+}
+
+dict.gmDict = {
+  3: "Standard",
+  2: "Doubles",
+  1: "Solo",
+}
 
 var dbConfig = {
   user: 'jbyers',
@@ -17,13 +76,12 @@ var dbConfig = {
   }
 }
 
-function sqlCall(query) {
+async function sqlCall(query) {
   var conn = new sql.ConnectionPool(dbConfig);
-  var data;
-  conn.connect().then(function () {
+  var data = {};
+  await conn.connect().then(async function () {
       var req = new sql.Request(conn);
-      req.query(query).then(function (recordset) {
-          console.log(recordset);
+      await req.query(query).then(function (recordset) {
           data = recordset;
           conn.close();
       })
@@ -34,6 +92,7 @@ function sqlCall(query) {
   })
   .catch(function (err) {
       console.log(err);
+      conn.close();
   });
   return data;
 }
@@ -59,16 +118,24 @@ app.post('/player', async function (req, res) {
   try {
     var player_ID = req.body.usrInput;
     var steam_ID = await vanityToSteam(player_ID);
-    var data;
+    var data = [];
     if(steam_ID == null) {
       steam_ID = player_ID;
     }
     console.log(steam_ID);
-    let profile = await steamToProfile(steam_ID);
+    try {
+      var profile = await steamToProfile(steam_ID);
+    }
+    catch (error)
+    {
+      //dep
+    }
     let ranks = null;
     if(profile !== null) {
       ranks = await steamToStats(steam_ID);
-      data.matchStats = sqlCall("SELECT * FROM MatchStats WHERE PlatformId = " + steam_ID);
+      data.matchStats = await sqlCall("SELECT PlatformId, Team, Score, Goals, Assists, Saves, Shots, CarId, Verdict, MatchStats.MatchId, [Date], TeamSize, Team0Score, Team1Score, " +
+                                      "MatchType, MapName, FieldOfView, Height, Pitch, Distance, Stiffness, SwivelSpeed, TransitionSpeed FROM MatchStats INNER JOIN MatchData ON MatchStats.MatchId = " +
+                                      "MatchData.MatchId WHERE PlatformId = " + steam_ID + " ORDER BY [Date] desc");
     }
     if(profile == null) {
       res.render('error', {message: "Failed to find a corresponding steam profile"});
@@ -77,11 +144,11 @@ app.post('/player', async function (req, res) {
       res.render('error', {message: "Failed to locate valid statistics for the entered user in the Psyonix API"});
     }
     else {
-      res.render('player', {profile: profile, ranks: ranks, data: data, error: null});
+      res.render('player', {profile: profile, ranks: ranks, data: data, dict: dict, error: null});
     }
   }
   catch (error) {
-    console.error(error);
+    console.error(error = "WE HAD AN ERROR");
   }
 });
 
@@ -128,13 +195,13 @@ async function steamToProfile(steam_ID) {
 }
 
 async function steamToStats(steam_ID) {
-  let key = 'P5AIQRRDCYLFDOXZ0BKA1IE2S97REIFD';
+  let apiKey = 'P5AIQRRDCYLFDOXZ0BKA1IE2S97REIFD';
   let url = `https://api.rocketleaguestats.com/v1/player?unique_id=${steam_ID}&platform_id=1`;
-  var ranks = [""];
+  var ranks = [];
   var options = {
     url: url,
     headers: {
-      Authorization: key
+      Authorization: apiKey
     }
   };
   await request(options, function(err, response, body, statusCode) {
@@ -143,18 +210,62 @@ async function steamToStats(steam_ID) {
     }
     else {
       let data = JSON.parse(body);
-      console.log(data);
-      let standard = [data["rankedSeasons"]["8"]["13"]["rankPoints"], data["rankedSeasons"]["8"]["13"]["tier"], data["rankedSeasons"]["8"]["13"]["division"]];
-      let doubles = [data["rankedSeasons"]["8"]["11"]["rankPoints"], data["rankedSeasons"]["8"]["11"]["tier"], data["rankedSeasons"]["8"]["11"]["division"]];
-      let duel = [data["rankedSeasons"]["8"]["10"]["rankPoints"], data["rankedSeasons"]["8"]["10"]["tier"], data["rankedSeasons"]["8"]["10"]["division"]];
-      let solo = [data["rankedSeasons"]["8"]["12"]["rankPoints"], data["rankedSeasons"]["8"]["12"]["tier"], data["rankedSeasons"]["8"]["12"]["division"]];
-      assignStrings([standard, doubles, duel, solo]);
-      ranks = {standard: standard, doubles: doubles, duel: duel, solo: solo};  
+      if(data.hasOwnProperty('rankedSeasons')) {
+        for(var key in data["rankedSeasons"]) {
+          var modes = [];
+          modes["season"] = key;
+          if(data["rankedSeasons"][key].hasOwnProperty("13")) {
+            var stats = [];
+            stats["mode"] = "standard";
+            stats.push(data["rankedSeasons"][key]["13"]["rankPoints"]);
+            stats.push(data["rankedSeasons"][key]["13"]["tier"]);
+            stats.push(data["rankedSeasons"][key]["13"]["division"]);
+            modes.push(stats);
+          }
+          else {
+            modes.push(null);
+          }
+          if(data["rankedSeasons"][key].hasOwnProperty("11")) {
+            var stats = [];
+            stats["mode"] = "doubles";
+            stats.push(data["rankedSeasons"][key]["11"]["rankPoints"]);
+            stats.push(data["rankedSeasons"][key]["11"]["tier"]);
+            stats.push(data["rankedSeasons"][key]["11"]["division"]);
+            modes.push(stats);
+          }
+          else {
+            modes.push(null);
+          }
+          if(data["rankedSeasons"][key].hasOwnProperty("10")) {
+            var stats = [];
+            stats["mode"] = "duel";
+            stats.push(data["rankedSeasons"][key]["10"]["rankPoints"]);
+            stats.push(data["rankedSeasons"][key]["10"]["tier"]);
+            stats.push(data["rankedSeasons"][key]["10"]["division"]);
+            modes.push(stats);
+          }
+          else {
+            modes.push(null);
+          }
+          if(data["rankedSeasons"][key].hasOwnProperty("12")) {
+            var stats = [];
+            stats["mode"] = "solo";
+            stats.push(data["rankedSeasons"][key]["12"]["rankPoints"]);
+            stats.push(data["rankedSeasons"][key]["12"]["tier"]);
+            stats.push(data["rankedSeasons"][key]["12"]["division"]);
+            modes.push(stats);
+          }
+          else {
+            modes.push(null);
+          }
+          assignStrings(modes);
+          ranks.push(modes);
+        }
+      }
     }
   });
   return ranks;
 }
-
 
 function assignStrings(ranks) {
   for(let i of ranks) {
@@ -223,3 +334,4 @@ function assignStrings(ranks) {
     i.divisionString = "Division " + (i[2] + 1);
   }
 }
+

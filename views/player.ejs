@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Lilita+One|Shrikhand" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script>
+    </script>
   </head>
   <style>
   </style>
@@ -39,17 +41,20 @@
             <div class="t1">
               standard
             </div>
-            <% if(ranks !== null){ %>
+            <% if(ranks !== null) { %>
+              <% var ranks = ranks[ranks.length - 1]; %>
+              <% if(ranks[0] !== null) { %>
               <div>
-                <%=ranks.standard.rankString%>
-                <%=ranks.standard.divisionString%>
+                <%=ranks[0].rankString%>
+                <%=ranks[0].divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + ranks.standard[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks[0][1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=ranks.standard[0]%>
+              rating: <%=ranks[0][0]%>
               </div>
+              <% } %>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
@@ -59,17 +64,19 @@
             <div class="t1">
               doubles
             </div>
-            <% if(ranks !== null){ %>
+            <% if(ranks !== null) { %>
+              <% if(ranks[1] !== null) { %>
               <div>
-                <%=ranks.doubles.rankString%>
-                <%=ranks.doubles.divisionString%>
+                <%=ranks[1].rankString%>
+                <%=ranks[1].divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + ranks.doubles[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks[1][1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=ranks.doubles[0]%>
+              rating: <%=ranks[1][0]%>
               </div>
+              <% } %>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
@@ -79,17 +86,19 @@
             <div class="t1">
               duel
             </div>
-            <% if(ranks !== null){ %>
+            <% if(ranks !== null) { %>
+              <% if(ranks[2] !== null) { %>
               <div>
-                <%=ranks.duel.rankString%>
-                <%=ranks.duel.divisionString%>
+                <%=ranks[2].rankString%>
+                <%=ranks[2].divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + ranks.duel[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks[2][1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=ranks.duel[0]%>
+              rating: <%=ranks[2][0]%>
               </div>
+              <% } %>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
@@ -99,25 +108,76 @@
             <div class="t1">
               solo standard
             </div>
-            <% if(ranks !== null){ %>
+            <% if(ranks !== null) { %>
+              <% if(ranks[3] !== null) { %>
               <div>
-                <%=ranks.solo.rankString%>
-                <%=ranks.solo.divisionString%>
+                <%=ranks[3].rankString%>
+                <%=ranks[3].divisionString%>
               </div>
               <div>
-                <img class="rankpic" src=<%="/images/site/" + ranks.solo[1] + ".png"%> alt="rank"/>
+                <img class="rankpic" src=<%="/images/site/" + ranks[3][1] + ".png"%> alt="rank"/>
               </div>
               <div>
-              rating: <%=ranks.solo[0]%>
+              rating: <%=ranks[3][0]%>
               </div>
+              <% } %>
             <% } %>
             <% if(error !== null){ %>
               <%= error %>
             <% } %>
           </div>
         </div>
-        <div class="matchHistory">
-          <%= data.matchHistory %>
+        / match history
+        <div class="matchhistory">
+          <% if(data.matchStats.recordset.length != 0) { %>
+            <table class="mhtable">
+              <tr>
+                <th>Gamemode</th>
+                <th>Blue Score</th>
+                <th>Orange Score</th>
+                <th>Player Score</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                <th>Saves</th>
+                <th>Shots</th>
+                <th>Car</th>
+                <th>Date</th>
+              </tr>
+              <% var options = {day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: 'true'}; %>
+              <% for(var r = 0; r < data.matchStats.recordset.length; r++) { %>
+                <% if(data.matchStats.recordset[r].Verdict == true) { %>
+                  <tr class="win">
+                <% } %>
+                <% if(data.matchStats.recordset[r].Verdict == false) { %>
+                  <tr class="loss">
+                <% } %>
+                    <td><%= dict.gmDict[data.matchStats.recordset[r].TeamSize] %></td>
+                    <% if(data.matchStats.recordset[r].Team == 0) { %>
+                      <td class="team"><%= data.matchStats.recordset[r].Team0Score %></td>
+                    <% } %>
+                    <% if(data.matchStats.recordset[r].Team != 0) { %>
+                      <td><%= data.matchStats.recordset[r].Team0Score %></td>
+                    <% } %>
+                    <% if(data.matchStats.recordset[r].Team == 1) { %>
+                      <td class="team"><%= data.matchStats.recordset[r].Team1Score %></td>
+                    <% } %>
+                    <% if(data.matchStats.recordset[r].Team != 1) { %>
+                      <td><%= data.matchStats.recordset[r].Team1Score %></td>
+                    <% } %>
+                    <td><%= data.matchStats.recordset[r].Score %></td>
+                    <td><%= data.matchStats.recordset[r].Goals %></td>
+                    <td><%= data.matchStats.recordset[r].Assists %></td>
+                    <td><%= data.matchStats.recordset[r].Saves %></td>
+                    <td><%= data.matchStats.recordset[r].Shots %></td>
+                    <td><%= dict.carDict[data.matchStats.recordset[r].CarId] %></td>
+                    <td><%= data.matchStats.recordset[r].Date.toLocaleDateString("en-US", options) %></td>
+                  </tr>
+              <% } %>
+            </table>
+          <% } %>
+          <% if(data.matchStats.recordset.length == 0) { %>
+            no entries found for user entered (are you running our auto-uploader?)
+          <% } %>
         </div>
       </div>
     </div>
