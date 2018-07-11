@@ -1,0 +1,15 @@
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\RLParseData.exe.config
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\RLParseData.exe
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\RLParseData.pdb
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\KellermanSoftware.Compare-NET-Objects.dll
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\Newtonsoft.Json.dll
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\RocketLeagueReplayParser.dll
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\KellermanSoftware.Compare-NET-Objects.xml
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\bin\Debug\Newtonsoft.Json.xml
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.csprojAssemblyReference.cache
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.csproj.CoreCompileInputs.cache
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.csproj.CopyComplete
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.exe
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.pdb
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.Properties.Resources.resources
+C:\Users\jbyers\source\repos\RLParseData\RLParseData\obj\Debug\RLParseData.csproj.GenerateResource.cache
