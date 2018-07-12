@@ -3,17 +3,30 @@
   <head>
     <meta charset="utf-8">
     <title>Test</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Lilita+One|Shrikhand" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div class="container">
-      <fieldset>
+    <div class="centerbox">
+      <div class="logo">
+        rlstats
+      </div>
+      <div class="searchblock">
         <form action="/player" method="post">
           <input name="usrInput" type="text" class="search" placeholder="enter steamID or username" required>
         </form>
-      </fieldset>
+      </div>
+      <div class="hotlinks">
+        <a href = "#"><in>global stats</in></a>
+        <div class="dot">·</div>
+        <a href = "https://www.google.com"><in>about</in></a>
+        <div class="dot">·</div>
+        <a href="https://github.com/jbyers44/rl.stat"><in>github</in></a>
+        <div class="dot">·</div>
+        <a href = "#"><in>support</in></a>
+      </div>
     </div>
     <div class="footer">
         <% include partials/footer %>

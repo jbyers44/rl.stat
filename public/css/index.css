@@ -1,0 +1,48 @@
+html, body    {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: "Fira Mono", monospace;
+    display: flex;
+}
+.centerbox  {
+    margin: 10% auto auto auto;
+    text-align: center;
+    align-items: center;
+}
+.searchblock    {
+    margin: auto;
+}
+.search {
+    min-width: 300px;
+    padding: 10px 15px;
+    font-family: "Fira Mono", monospace;
+    border: 0px;
+    border-bottom:1px solid #ddd;
+    color: #4b545f;
+    text-align: center;
+    font-size: 15px;
+    outline: none;
+}
+.logo {
+    padding-left: 10px;
+    font-family: "Shrikhand";
+    font-size: 50px;
+}
+.hotlinks {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+a {
+    color: #333;
+    text-decoration: none;
+}
+.in {
+    margin: 0px 10px;
+    padding: 5px;
+}
+.dot {
+    padding: 0px 10px;
+}
