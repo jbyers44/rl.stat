@@ -101,7 +101,7 @@ body {
     text-align: center;
     border-top: 1px solid rgb(70, 70, 70);
     border-bottom: 1px solid rgb(70, 70, 70);
-    background-color: rgba(255, 255, 205, 0.89);
+    background-color: rgb(252, 252, 220);
     margin-bottom: 5px;
   }
   .verticalcarstat {
@@ -131,6 +131,7 @@ body {
     text-align: center;
     border: 1px solid rgb(70, 70, 70);
     background-color: rgb(213, 248, 213);
+
   }
   .errmsg {
     text-align: center;

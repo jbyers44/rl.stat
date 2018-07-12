@@ -134,7 +134,7 @@ app.post('/player', async function (req, res) {
       }
       data.matchStats = await sqlCall("SELECT PlatformId, Team, Score, Goals, Assists, Saves, Shots, CarId, Verdict, MatchStats.MatchId, [Date], TeamSize, Team0Score, Team1Score, " +
                                       "MatchType, MapName, FieldOfView, Height, Pitch, Distance, Stiffness, SwivelSpeed, TransitionSpeed FROM MatchStats INNER JOIN MatchData ON MatchStats.MatchId = " +
-                                      "MatchData.MatchId WHERE PlatformId = " + steam_ID + " ORDER BY [Date] desc");
+                                      "MatchData.MatchId WHERE PlatformId = 76561198438818487 ORDER BY [Date] desc");
     }
     if(profile == null) {
       res.render('error', {message: "Failed to find a corresponding steam profile"});
@@ -272,69 +272,71 @@ async function steamToStats(steam_ID) {
 
 function assignStrings(ranks) {
   for(let i of ranks) {
-    switch(i[1]) {
-      case 0:
-        i.rankString = "Unranked";
-        break;
-      case 1:
-        i.rankString = "Bronze I";
-        break;
-      case 2:
-        i.rankString = "Bronze II";
-        break;
-      case 3:
-        i.rankString = "Bronze III";
-        break;
-      case 4:
-        i.rankString = "Silver I";
-        break;
-      case 5:
-        i.rankString = "Silver II";
-        break;
-      case 6:
-        i.rankString = "Silver III";
-        break;
-      case 7:
-        i.rankString = "Gold I";
-        break;
-      case 8:
-        i.rankString = "Gold II";
-        break;
-      case 9:
-        i.rankString = "Gold III";
-        break;
-      case 10:
-        i.rankString = "Platinum I";
-        break;
-      case 11:
-        i.rankString = "Platinum II";
-        break;
-      case 12:
-        i.rankString = "Platinum III";
-        break;
-      case 13:
-        i.rankString = "Diamond I";
-        break;
-      case 14:
-        i.rankString = "Diamond II";
-        break;
-      case 15:
-        i.rankString = "Diamond III";
-        break;
-      case 16:
-        i.rankString = "Champion I";
-        break;
-      case 17:
-        i.rankString = "Champion II";
-        break;
-      case 18:
-        i.rankString = "Champion III";
-        break;
-      case 19:
-        i.rankString = "Grand Champion";
-        break;
+    if(i != null) {
+      switch(i[1]) {
+        case 0:
+          i.rankString = "Unranked";
+          break;
+        case 1:
+          i.rankString = "Bronze I";
+          break;
+        case 2:
+          i.rankString = "Bronze II";
+          break;
+        case 3:
+          i.rankString = "Bronze III";
+          break;
+        case 4:
+          i.rankString = "Silver I";
+          break;
+        case 5:
+          i.rankString = "Silver II";
+          break;
+        case 6:
+          i.rankString = "Silver III";
+          break;
+        case 7:
+          i.rankString = "Gold I";
+          break;
+        case 8:
+          i.rankString = "Gold II";
+          break;
+        case 9:
+          i.rankString = "Gold III";
+          break;
+        case 10:
+          i.rankString = "Platinum I";
+          break;
+        case 11:
+          i.rankString = "Platinum II";
+          break;
+        case 12:
+          i.rankString = "Platinum III";
+          break;
+        case 13:
+          i.rankString = "Diamond I";
+          break;
+        case 14:
+          i.rankString = "Diamond II";
+          break;
+        case 15:
+          i.rankString = "Diamond III";
+          break;
+        case 16:
+          i.rankString = "Champion I";
+          break;
+        case 17:
+          i.rankString = "Champion II";
+          break;
+        case 18:
+          i.rankString = "Champion III";
+          break;
+        case 19:
+          i.rankString = "Grand Champion";
+          break;
+      }
+      i.divisionString = "Division " + (i[2] + 1);
     }
-    i.divisionString = "Division " + (i[2] + 1);
   }
 }
 
